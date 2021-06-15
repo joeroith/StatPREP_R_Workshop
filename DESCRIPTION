@@ -1,13 +1,13 @@
 Package: BeginnerRWorkshop
-Title: What the Package Does (One Line, Title Case)
+Title: Tutorials for StatPREP R workshops
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Joe",
+           family = "Roith",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "roith1@stolaf.edu",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Contains several tutorials for the summer 2021 StatPREP Beginner R workshop. These tutorials include basic exploratory data analysis, visualizations, and inference procedures. These tutorials are to be used during the June 18-19 and July 15-16 workshops.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
