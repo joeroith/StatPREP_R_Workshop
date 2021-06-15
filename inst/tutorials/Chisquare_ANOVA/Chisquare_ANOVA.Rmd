@@ -1,0 +1,87 @@
+---
+title: "Chi-square and ANOVA tutorial"
+subtitle: "StatPREP R Workshops"
+author: "Kate Kozak"
+description: Inference tutorial for workshop on RStudio
+output: 
+  learnr::tutorial:
+    theme: "journal"
+    progressive: TRUE
+    allow_skip: TRUE
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library("learnr")
+library("mosaic")
+library("NHANES")
+library("mosaicData")
+library("MASS")
+
+vector_of_counts <- tally( ~ domhand, data = KidsFeet)
+cross_tabulation <- tally(domhand ~ sex, data = KidsFeet)
+anorexia_gain<-
+  anorexia%>%
+  mutate(Gain=Postwt-Prewt)
+```
+
+
+
+
+## Chi-squared Test
+
+The `chisq.test()` function in R carries out the test. For introductory statistics, it's used in mainly two ways:
+
+- test whether a vector of counts is consistent with a given probability model.
+
+- test whether two categorical variables are independent of one another by examining a contingency table of counts.
+
+### Goodness of fit
+
+First let's to see if a vector count is consistent with a given probability model. Use tally() to produce the vector, then apply `chisq.test()`. To illustrate, let's use the KidsFeet data frame, which has several categorical variables. The variable vector_of_counts is a vector of the number of left-handed and right-handed people. The command `chisq.test(vector_of_counts)` will check whether the number of left-handed kids is consistent with a hypothesized 50-50 split in handedness. 
+
+```{r gooness, exercise = TRUE}
+vector_of_counts <- tally( ~ domhand, data = KidsFeet)
+chisq.test(vector_of_counts)
+```
+
+The reason to do the test in two steps – tally then test – is to let you look at the tally. We haven't done that in the above chunk, but you can easily add the necessary lines to the command block. (Hint: Give `vector_of_counts` as a command.)
+
+If you wanted to check the counts of handedness against a more realistic hypothesis than a 50-50 split, you can give an argument p = specifying the hypothesized proportions. Try, for instance, `p = c(.25, .75)`.
+
+### Test of Independence
+
+Now test if two variables are independent. The `tally()` command can also be used to produce the contingency table, then the `chisq.test()` can be used on the contingency table. To illustrate, again use the KidsFeet data frame. The variable cross_tabulation is the contingency table of hand dominance and sex. To check whether sex is independent of handedness use the command `chisq.test(cross_tabulation)`.
+
+```{r indep, exercise = TRUE, warning = FALSE}
+cross_tabulation <- tally(domhand ~ sex, data = KidsFeet)
+chisq.test(cross_tabulation)
+```
+
+If you would like to look at the contingency table, think of a command that you can add to the above command.
+
+Suppose you want to test if the pulse rates (`Pulse`) between Gender is different in the NHANES dataframe, type in what you think the command would look like to produce the results.
+
+```{r open, exercise = TRUE}
+
+```
+
+
+## Analysis of Variance (ANOVA)
+
+An ANOVA can be used to see if there is a difference between means when there are more than 2 samples. The process for producing the calculations for an ANOVA are:
+
+```{r, eval = FALSE}
+anorexia_gain<-
+  anorexia%>%
+  mutate(Gain=Postwt-Prewt)
+```
+
+```{r aov, exercise = TRUE}
+results = aov(Gain ~ Treat, data=anorexia_gain) # computes an anova and saves it as results
+summary(results) # displays the results
+```
+
+

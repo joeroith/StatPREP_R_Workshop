@@ -1,0 +1,322 @@
+---
+title: "EDA Breakout Room Practice"
+subtitle: "StatPREP R Workshops"
+author: "Joe Roith"
+output: 
+  learnr::tutorial:
+    theme: "journal"
+    progressive: TRUE
+    allow_skip: TRUE
+runtime: shiny_prerendered
+---
+
+<style type="text/css">
+span.boxed {
+  border:5px solid gray;
+  border-radius:10px;
+  padding: 5px;
+}
+span.invboxed {
+  border:5px solid gray;
+  padding: 5px;
+  border-radius:10px;
+  color: white;
+}
+
+table, td, th { border:0px; }
+
+/* cellpadding */
+th, td { padding: 5px; }
+
+</style>
+
+```{r setup, include=FALSE}
+# Don't forget to load your libraries
+library(mosaic)
+library(ggformula)
+library(readr)
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+
+jeans <- read_csv("https://raw.githubusercontent.com/joeroith/Data/master/measurements_jeans.csv")
+#View(jeans)
+```
+
+## Are all jeans created equal?
+
+In 2018, the website *The Pudding* published an award-winning visual essay called [Women's pockets are Inferior](https://pudding.cool/2018/08/pockets/). We would like to explore this data and see if we can find any interesting features about the pocket sizes of jeans.
+
+In your breakout rooms assign the following roles:
+
+- **Recorder** - shares screen and records answers (share screen can be tasked to someone else if they prefer). <font color='orange'>**Whoever woke up earliest.**</font>
+
+- **Facilitator** - keeps everything on task, time keeper, making sure group is inclusive. <font color='orange'>**Woke up 2nd earliest.**</font> 
+
+- **Reporter** - report out to entire group. <font color='orange'>**Woke up latest.**</font>
+
+This interactive tutorial has pre-loaded the data and libraries needed to complete the tasks. But so you see what's going on in the background and develop good habits, here is the code to load the libraries and import the data from a URL. You may open a new R Markdown file and run your code in the RStudio Cloud project, but it is not necessary (if you do, be sure to run the libraries and import code below first). Otherwise you can just use the code chunks provided in this tutorial. 
+
+```{r, eval = FALSE, echo = TRUE}
+library(mosaic) # package with some of the functions we need
+library(ggformula) # more functions for plots and tables
+library(readr) # to read in the data
+library(learnr) # necessary to create this tutorial, not needed for normal EDA coding
+
+# read in the csv and save it as "jeans"
+jeans <- read_csv("https://raw.githubusercontent.com/joeroith/Data/master/measurements_jeans.csv")
+```
+
+There will be little checks along the way to make sure you are on the right track. Also, please use the *EDA.Rmd* file in our RStudio Cloud project to copy, paste, and edit code. You are not expected to code from memory.
+
+> The dataset and variable documentation for this dataset is available in the following [link](https://github.com/the-pudding/data/tree/master/pockets).
+
+Before we jump right in, what do the data look like? How many variables and observations are there? Make sure you cycle through all of the columns so you know the exact spelling of variable names
+
+```{r prelim, exercise = TRUE}
+jeans
+dim(jeans)
+```
+
+```{r check0}
+quiz(caption = "Check your data",
+     question("How many jeans are in this sample?",
+              answer("80", correct = TRUE),
+              answer("10"),
+              answer("4"),
+              answer("16"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     ),
+     question("How many variables are in this sample?",
+              answer("80"),
+              answer("10"),
+              answer("4"),
+              answer("16", correct = TRUE),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     )
+)
+```
+
+
+
+## Summary Statistics and Tables
+
+These are the two functions you will be practicing with:
+
+- `gf_stats()`
+- `tally()`
+
+Remember the use the functions template:
+
+<center>
+<h3><strong> <span class="boxed">function</span> ( <span class="boxed">formula</span> , data = <span class="boxed">data_table</span> , ... )</strong> 
+</h3></center>
+
+&nbsp;
+
+And that formulas can be either `~ x` or `y ~ x`.
+
+---
+
+### Price
+
+1. What is the average price of jeans in this dataset?
+
+2. How many men's jeans are in the data?
+
+3. What is the median price of women's jeans?
+
+
+```{r price_sandbox, exercise = TRUE, exercise.lines = 5}
+
+```
+
+
+```{r price_sandbox-hint, eval = FALSE}
+# use df_stats() and remember you can split by using |
+# check spelling and capitalization if something is "not found"
+```
+
+```{r price_quiz}
+quiz(caption = "Check your work (this won't count against your final grade ;)",
+     question("What is the average price of jeans?",
+              answer("80.75", correct = TRUE),
+              answer("73.98"),
+              answer("44.55"),
+              answer("95.71"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     ),
+     question("How many men's jeans were included?",
+              answer("40", correct = TRUE),
+              answer("80"),
+              answer("249"),
+              answer("16"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     ),
+     question("What is the median price of women's jeans?",
+              answer("78.75", correct = TRUE),
+              answer("69.72"),
+              answer("73.98"),
+              answer("80.32"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     )
+)
+```
+
+
+### Styles
+
+4. How many skinny jeans are in the dataset?
+
+5. What proportion of women's jeans are boot-cut?
+
+```{r style_sandbox, exercise = TRUE, exercise.lines = 5}
+
+```
+
+```{r style_sandbox-hint, eval = FALSE}
+# use tally() and remember you can use format = "proportion"
+# think carefully about whether you want conditional proportions or joint proportions 
+# as well as how the order of variables affects things
+```
+
+
+```{r style_quiz}
+quiz(caption = "",
+     question("How many skinny jeans are in the dataset?",
+              answer("32", correct = TRUE),
+              answer("11"),
+              answer("28"),
+              answer("80"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     ),
+     question("What proportion of women's jeans are boot-cut?",
+              answer("0.10", correct = TRUE),
+              answer("0.1375"),
+              answer("0.36"),
+              answer("0.05"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     )
+)
+```
+
+
+### Ask your own questions
+
+We will return to the main room before moving on to visualizations. If you have extra time, pose some of your own exploratory questions and try to answer them.
+
+```{r sandbox1, exercise = TRUE, exercise.lines = 10}
+
+```
+
+## Visualizing Data
+
+Here's a reminder of all the functions we've covered for plots and graphs:
+
+- `gf_histogram`
+- `gf_density`
+- `gf_bar`
+- `gf_props`
+- `gf_boxplot`
+- `gf_violin`
+- `gf_jitter`
+- `gf_point`
+
+And here are the additional attributes you can change within each function (Note: some attributes only work for certain types of variables or plots):
+
+- `color`
+- `fill`
+- `alpha`
+- `shape`
+- `size`
+- `title`
+- `subtitle`
+- `ylab`
+- `xlab`
+
+### Pocket height
+
+1. Make an appropriate plot to show the distribution of maximum front pocket heights (`maxHeightFront`).
+
+2. Add a title, change the x-axis label, and add color based on `menWomen` to the previous plot.
+
+3. Create a boxplot showing the same information as the first plot
+
+```{r height_sandbox, exercise = TRUE, exercise.lines = 5}
+
+```
+
+```{r height_sandbox-hint, eval = FALSE}
+# gf_histogram and gf_density are good for viewing distributions
+# remember to include the ~ if you change an attribute based on a variable
+# labels need to be in quotations
+# Think about your x- and y-axis orientation for boxplots
+```
+
+
+```{r height_quiz}
+quiz(caption = "",
+     question("Which description is true about the distribution of maximum front pocket heights?",
+              answer("The distribution is bimodal", correct = TRUE),
+              answer("The ditribution is symmetric"),
+              answer("The distribution is skewed"),
+              answer("The distribution is unimodal"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     ),
+     question("Roughly estimate the difference in median front pocket heights between men and women.",
+              answer("8.5", correct = TRUE),
+              answer("5"),
+              answer("2.5"),
+              answer("12"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     )
+)
+```
+
+
+### Price, pocket size, and more
+
+4. Create a scatterplot to show the relationship between price and minimum back pocket width (`minWidthBack`).
+
+5. Change the shape of the points based on `style` and the color of the points based on `menWomen`.
+
+```{r scatter_sandbox, exercise = TRUE, exercise.lines = 5}
+
+```
+
+```{r scatter_sandbox-hint, eval = FALSE}
+# gf_point or gf_jitter will work
+```
+
+```{r scatter_quiz}
+quiz(caption = "",
+     question("Does there seem to be any strong relationships between price, back pocket width, gender, and style?",
+              answer("Not really", correct = TRUE),
+              answer("Sure I can see some trends", message = "Everyone sees something different! I didn't see much"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE
+     )
+)
+```
+
+
+### Create your own plots
+
+If you have more time, try creating different plots and graphs!
+
+```{r sandbox2, exercise = TRUE, exercise.lines = 10}
+
+```
+
+
+
+
+

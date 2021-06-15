@@ -1,0 +1,163 @@
+---
+title: "Functions and arguments"
+subtitle: "StatPREP R Workshops"
+author: "Danny Kaplan"
+description: Using Functions in R
+output: learnr::tutorial
+tutorial:
+  id: StatPREP/Functions
+  version: 0.1
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(magrittr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<style type="text/css">
+span.boxed {
+  border:5px solid gray;
+  border-radius:10px;
+  padding: 5px;
+}
+span.invboxed {
+  border:5px solid gray;
+  padding: 5px;
+  border-radius:10px;
+  color: white;
+}
+</style>
+
+## Basic syntax
+
+Almost all commands in R are built around the use of a *function*.
+
+
+Functions carry out operations on their inputs and produce an output. We *apply* a function to its inputs to create the output. The inputs taken by a function are called the function's *arguments*.
+
+The application of a function to arguments follows a simple structure: the name of the function is followed by a pair of parentheses. Values for the arguments are specified *inside* the parentheses: ![](images/parentheses.png). If there is more than one argument, the arguments are always separated by a comma: ![](images/comma.png) 
+
+<center>
+<h2><strong><span class="boxed">&nbsp;f&nbsp;</span> ![](images/left-paren.png) <span class="boxed">&nbsp;arg_1&nbsp;</span> <img src="images/comma.png"> <span class="boxed">&nbsp;arg_2&nbsp;</span> ![](images/right-paren.png)</strong> 
+</h2></center>
+&nbsp;
+
+In these notes, we will often write the name of a function followed by parentheses, for instance `log()`. The empty parentheses are merely a reminder that the name refers to a function.  
+
+### Invoking functions
+
+The following command chunk applies `log()` to the argument 100. This is sometimes called *invoking* or *calling* a function.
+
+```{r log0, exercise = TRUE}
+log(100)
+```
+
+Often, functions take more than one argument. The arguments are separated by commas. The order of the arguments is significant in determining the meaning, as illustrated by these two uses of the function `seq()`.
+
+```{r seq0, exercise = TRUE}
+seq(0, 5)
+seq(5, 0)
+```
+
+### Named arguments
+
+Functions can also allow or require you to declare the meaning of an argument by name, for instance:
+
+```{r seq1, exercise = TRUE}
+seq(to = 5, from = 0)
+log(100, base = 10)
+```
+
+These are called *named arguments*. They always have the form 
+<center>
+<h2><strong><span class="boxed">&nbsp;name&nbsp;</span> = <span class="boxed">&nbsp;value&nbsp;</span></strong> 
+</h2></center>
+&nbsp;
+
+with the name on the left and the value to be assigned to the argument on the right. The entire expression is the argument and arguments always go *inside* the parentheses that follow the name of the function.
+
+### Arithmetic notation
+
+For the sake of readability, arithmetic and some other functions that take one or two arguments are written in *infix* notation, without needing parentheses. For example:
+
+```{r arith0, exercise = TRUE}
+3 + 4
+10 ^ 3
+3 ^ 10
+```
+
+
+
+## Functions & commands
+
+Almost all commands in R involve applying a function to arguments. By default, if no other action is specified, the output will be printed. But there are two other common actions to take with the output of a function:
+
+* Use it immediately as the input to another function.
+    
+```{r function1, exercise = TRUE}
+log(seq(from = 5, to = 10), base = 10)
+```
+    
+Note that the output of `seq()` is being used as an input to `log()`. Since no action has been specified to take with the output of `log()`, the output is printed.
+
+* Assign a name to the output so that the output can be used later on. Sometimes this is called *storing* the value or *defining* an object.
+    
+```{r function2, exercise = TRUE}
+my_numbers <- log(seq(from = 5, to = 10), base = 10)
+```
+    
+   Assignment of a name to a value is done with the `<-` notation, which distinguishes it from the syntax for named arguments involving `=`. When you want to use the stored value, simply use the name.
+   
+### Exercise
+
+In the command block below, add a second command line to the command chunk where `my_numbers` was defined. The new line should cause `my_numbers` to be printed.
+
+```{r function3, exercise = TRUE}
+my_numbers <- log(seq(from = 5, to = 10), base = 10)
+```
+
+
+## The pipe style
+
+It can be hard to read a statement like
+
+```r
+my_numbers <- log(seq(from = 5, to = 10), base = 10)
+```
+ 
+First, there are nested parentheses. Second, it's hard to tell at a quick glance which function an argument belongs to. 
+
+Many of the commands we use will be written in **pipe notation**:
+
+```{r pipe0, exercise = TRUE}
+my_numbers <- 
+  seq(from = 5, to = 10) %>%
+  log(base = 10)
+```
+
+The pipe is written `%>%` and has the effect of inserting the value to its left
+into the function on the right. The value being piped will be inserted into the
+function in the position of the first argument.  So
+
+```{r, echo = TRUE, eval = FALSE}
+f(x) %>%
+  g(y)
+```
+is essentially equivalent to
+
+```{r, echo = TRUE, eval = FALSE}
+g(f(x), y)
+```
+
+The pipe notation presents functions in the order in which the functions will be
+evaluated. In the example above, the sequence 5 to 10 is generated first. That
+sequence is then piped to the `log()` function as its first argument.
+
+This improves readability. The human reader can see clearly that the argument
+`base = 10` is associated with the function `log()`; no cognitive load needs to
+be given over to sorting out the parentheses to figure out which argument goes
+with which function.
+
+Later we will be constructing somewhat long commands consisting of several functions connected by pipes. For clarity, each such function will be placed on its own line. The pipe token `%>%` will always appear at the end of the line until we have finished our statement.

@@ -1,0 +1,163 @@
+---
+title: "Inference tutorial"
+subtitle: "StatPREP R Workshops"
+author: "Kate Kozak"
+description: Inference tutorial for workshop on RStudio
+output: 
+  learnr::tutorial:
+    theme: "journal"
+    progressive: TRUE
+    allow_skip: TRUE
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+library(learnr)
+library(mosaic)
+library(NHANES)
+library(mosaicData)
+library(MASS)
+
+vector_of_counts <- tally( ~ domhand, data = KidsFeet)
+
+NHANES_sample<-
+  NHANES%>%
+  group_by(Gender)%>%
+  slice_sample(n=50)
+
+Difference<-
+  anorexia%>%
+  filter(Treat!="Cont") %>%
+  mutate(gain=Postwt-Prewt)
+
+bacteria_sample<-
+  bacteria%>%
+  slice_sample(n=50)
+```
+
+## Inference on means
+
+### One Sample Test
+
+First suppose you want to take a stratified sample based on `Gender` (binary)
+
+```{r statified_sample, echo = TRUE}
+NHANES_sample<-
+  NHANES%>%
+  group_by(Gender)%>%
+  slice_sample(n=50)
+```
+
+Suppose you want to estimate the mean height of a person. First, find the descriptive statistics:
+
+```{r descriptive_stats, exercise = TRUE, warning=FALSE}
+df_stats( ~ Height, data = NHANES_sample, mean, sd)
+df_stats(Height ~ Gender, data = NHANES_sample, mean, sd)
+```
+
+
+Suppose you want to test if the height of a person is not 69 inches. Here is the command:
+
+```{r one_sample, exercise = TRUE}
+t_test( ~ Height, mu=69, data = NHANES_sample)
+```
+
+### Two Sample Test
+
+If you want to test if there is a difference in a two sample independent means, then you need to type in the variable separated by the factor. The factor is a categorical variable that divides a qualitative variable between two samples. In you want to see if there is a difference in heights between genders, then you would type:
+
+```{r two_sample, exercise = TRUE}
+t_test( Height~Gender, data = NHANES_sample)
+```
+
+Suppose you want to test if the pulse rates (`Pulse`) between Gender is different in the NHANES dataframe, type in what you think the command would look like to produce the results.
+
+```{r pulse_two_sample, exercise = TRUE}
+
+```
+
+## Paired test
+
+A paired test is a one sample test on the difference between the paired data values. To do a paired test in RStudio, it is necessary to first modify the dataset to create a column that contains the differences between two columns. The command is mutate, with creating a new dataset:
+
+```{r filtering, echo = TRUE}
+Difference<-
+  anorexia%>%
+  filter(Treat!="Cont") %>%
+  mutate(gain=Postwt-Prewt)
+```
+
+
+Now just run a one sample t test on this new dataset.
+
+```{r paired_test, exercise = TRUE}
+t.test(~gain, data=Difference)
+```
+
+Note, you could also do a two sample t test on this dataset since there are two different treatments that were conducted on people with anorexia. One group received cognitive behavioral treatment while the other group received family treatment. What would the command look like for the question of which treatment did better.
+
+
+## Inference on proportions
+
+### Proportion Test
+
+Analogously to `t_test()`, the `binom.test()` and `prop.test()` functions do inference on sample proportions. For a single proportion, `binom.test()` produces the confidence interval on the sample proportion. For two proportions, `prop.test()` gives the confidence interval on the difference between the two proportions.
+
+To illustrate, consider the height from the Galton data frame, which is from Galton's study of the relationship between the heights of parents and their adult children. Let’s look at the proportion of people in Galton's data who are taller than 65 inches. If you want to know if the proportion is different from 50%, then this is what you do:
+
+```{r bact, echo = TRUE}
+head(bacteria)
+```
+
+```{r bact2, echo = TRUE}
+bacteria_sample<-
+  bacteria%>%
+  slice_sample(n=50)
+```
+
+```{r bact3, exercise = TRUE}
+binom.test( ~ height > 65, data = Galton)
+```
+
+Suppose a test for the presence of the bacteria H. influenza in children with otitis media in the Northern Territory of Australia. If you want to know if the percent of children with ottis media in Australia who have H. inflenza is not 10%.The process looks like this:
+
+```{r bact4, exercise = TRUE}
+binom.test(~y, data=bacteria_sample, p=0.1)
+```
+
+### []()
+
+If you don't have the dataset, but have the number of successes out of the number sampled. Suppose you have 12 out of 100 success, here is what the command looks like:
+
+```{r prop, exercise = TRUE}
+prop.test(12,100)
+```
+
+### Two Sample Proportion
+
+Now consider if you want to find out if the proportion of males taller than 65 inches is more than the proportion of females taller than 65 inches. You can also find the confidence interval of the difference in proportions. 
+
+```{r prop2, exercise = TRUE}
+prop.test(height > 65 ~ sex, data = Galton)
+```
+
+Is the proportion of children with otitis media in the Northern Territory of Australia who took a drug and had H. influenza is different than the proprotion who took a placebo?
+
+```{r prop3, exercise = TRUE}
+prop.test(y~ap, data=bacteria_sample)
+```
+
+How would the command change if you want to do a one sided test?
+
+```{r prop4, exercise = TRUE}
+prop.test(y~ap, data=bacteria_sample, alternative="greater")
+```
+
+### []()
+
+If you don't have the dataset, but have the number of successes out of the number sampled for each sample. Suppose you have 141 out of 288 and 125 out of 216, here is what the command looks like:
+
+```{r prop5, exercise = TRUE}
+prop.test(c(141, 125), c(288, 216))
+```
