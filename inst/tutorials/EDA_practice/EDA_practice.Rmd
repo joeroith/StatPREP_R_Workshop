@@ -104,7 +104,7 @@ quiz(caption = "Check your data",
 
 These are the two functions you will be practicing with:
 
-- `gf_stats()`
+- `df_stats()`
 - `tally()`
 
 Remember the use the functions template:
