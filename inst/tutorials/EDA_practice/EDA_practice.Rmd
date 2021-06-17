@@ -48,7 +48,7 @@ In 2018, the website *The Pudding* published an award-winning visual essay calle
 
 In your breakout rooms assign the following roles:
 
-- **Recorder** - shares screen and records answers (share screen can be tasked to someone else if they prefer). <font color='orange'>**Whoever woke up earliest.**</font>
+- **Displayer** - sharing screen (share screen can be tasked to someone else if they prefer). <font color='orange'>**Whoever woke up earliest.**</font>
 
 - **Facilitator** - keeps everything on task, time keeper, making sure group is inclusive. <font color='orange'>**Woke up 2nd earliest.**</font> 
 
