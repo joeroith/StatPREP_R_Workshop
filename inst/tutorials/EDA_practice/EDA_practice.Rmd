@@ -119,6 +119,13 @@ And that formulas can be either `~ x` or `y ~ x`.
 
 ---
 
+```{r, echo = TRUE}
+# Here are the variable names as a reminder
+names(jeans)
+```
+
+
+
 ### Price
 
 1. What is the average price of jeans in this dataset?
@@ -134,7 +141,7 @@ And that formulas can be either `~ x` or `y ~ x`.
 
 
 ```{r price_sandbox-hint, eval = FALSE}
-# use df_stats() and remember you can split by using |
+# use df_stats(), remember to use the '~' and define the data
 # check spelling and capitalization if something is "not found"
 ```
 
